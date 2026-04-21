@@ -1,0 +1,13 @@
+{
+  "name": "graphics-flipper-extension",
+  "version": "1.0.0",
+  "description": "Fix streaming black screens by toggling GPU hardware acceleration in Chrome and Edge with one click.",
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc --watch"
+  },
+  "devDependencies": {
+    "@types/chrome": "^0.0.268",
+    "typescript": "^5.4.0"
+  }
+}

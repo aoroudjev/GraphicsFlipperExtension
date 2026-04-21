@@ -1,0 +1,11 @@
+{
+  "compilerOptions": {
+    "target": "ES2017",
+    "lib": ["ES2017", "DOM"],
+    "outDir": "extension",
+    "rootDir": "src",
+    "strict": true,
+    "typeRoots": ["node_modules/@types"]
+  },
+  "include": ["src/**/*"]
+}

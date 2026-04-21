@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GPU Toggle</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #ffffff;
+      --surface: #f3f3f3;
+      --border: #e5e5e5;
+      --text: #111111;
+      --text-muted: #767676;
+      --accent: #0078d4;
+      --accent-hover: #106ebe;
+      --accent-disabled: #cde0f3;
+      --green: #107c10;
+      --red: #c50f1f;
+      --radius: 10px;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #1c1c1c;
+        --surface: #272727;
+        --border: #333333;
+        --text: #f0f0f0;
+        --text-muted: #999999;
+        --accent-disabled: #2a4a63;
+      }
+    }
+
+    body {
+      width: 280px;
+      font-family: -apple-system, "Segoe UI", system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      padding: 18px;
+    }
+
+    .header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+
+    .header-icon {
+      width: 18px;
+      height: 18px;
+      opacity: 0.45;
+      flex-shrink: 0;
+    }
+
+    .header h1 {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+
+    /* Status row */
+    .status-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 16px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      margin-bottom: 12px;
+    }
+
+    .status-left { display: flex; flex-direction: column; gap: 3px; }
+
+    .status-label {
+      font-size: 15px;
+      font-weight: 600;
+      line-height: 1;
+    }
+
+    .status-sub {
+      font-size: 11.5px;
+      color: var(--text-muted);
+    }
+
+    /* Pill badge */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.03em;
+      background: #e8f4e8;
+      color: var(--green);
+      transition: background 0.2s, color 0.2s;
+    }
+    .badge.off { background: #fce8e8; color: var(--red); }
+    .badge.loading { background: var(--border); color: var(--text-muted); }
+
+    .badge-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: currentColor;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      .badge     { background: #1a3320; color: #4ec94e; }
+      .badge.off { background: #3a1a1a; color: #f08080; }
+      .badge.loading { background: var(--border); }
+    }
+
+    /* Button */
+    .toggle-btn {
+      width: 100%;
+      padding: 10px 0;
+      border: none;
+      border-radius: var(--radius);
+      background: var(--accent);
+      color: #fff;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    .toggle-btn:hover:not(:disabled) { background: var(--accent-hover); }
+    .toggle-btn:disabled {
+      background: var(--accent-disabled);
+      color: var(--text-muted);
+      cursor: default;
+    }
+
+    /* Footer message */
+    .message {
+      font-size: 11px;
+      color: var(--text-muted);
+      text-align: center;
+      margin-top: 9px;
+      min-height: 15px;
+      line-height: 1.4;
+    }
+    .message.error { color: var(--red); }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <svg class="header-icon" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect x="3" y="5" width="14" height="10" rx="2" stroke="currentColor" stroke-width="1.5"/>
+      <line x1="6" y1="5" x2="6" y2="3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+      <line x1="10" y1="5" x2="10" y2="3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+      <line x1="14" y1="5" x2="14" y2="3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+      <line x1="6" y1="17" x2="6" y2="15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+      <line x1="10" y1="17" x2="10" y2="15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+      <line x1="14" y1="17" x2="14" y2="15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+      <circle cx="10" cy="10" r="2" fill="currentColor"/>
+    </svg>
+    <h1>Hardware Acceleration</h1>
+  </div>
+
+  <div class="status-row">
+    <div class="status-left">
+      <span class="status-label" id="status-label">Loading</span>
+      <span class="status-sub" id="status-sub">Checking current state</span>
+    </div>
+    <span class="badge loading" id="badge">
+      <span class="badge-dot"></span>
+      <span id="badge-text">—</span>
+    </span>
+  </div>
+
+  <button class="toggle-btn" id="toggle-btn" disabled>Toggle &amp; Restart</button>
+  <p class="message" id="message"></p>
+
+  <script src="popup.js"></script>
+</body>
+</html>

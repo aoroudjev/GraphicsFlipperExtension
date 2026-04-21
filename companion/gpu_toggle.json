@@ -1,0 +1,10 @@
+{
+  "name": "com.gpuflip.toggle",
+  "description": "GPU Acceleration Toggle - Native Messaging Host",
+  "path": "C:\\edge_graphics_flipper\\companion\\NativeHost.exe",
+  "type": "stdio",
+  "allowed_origins": [
+    "chrome-extension://nfloihcfmeeelbfgocljfndbngbjngie/",
+    "chrome-extension://ghmnblflimkddhmfgjohhjkfiflfedmk/"
+  ]
+}

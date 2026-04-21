@@ -1,7 +1,8 @@
 {
+  "_comment": "This is a reference template. The installer generates the deployed copy at %LOCALAPPDATA%\\GraphicsFlipper\\gpu_toggle.json with the correct absolute path.",
   "name": "com.gpuflip.toggle",
   "description": "GPU Acceleration Toggle - Native Messaging Host",
-  "path": "C:\\edge_graphics_flipper\\companion\\NativeHost.exe",
+  "path": "<set by installer>",
   "type": "stdio",
   "allowed_origins": [
     "chrome-extension://nfloihcfmeeelbfgocljfndbngbjngie/",

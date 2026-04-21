@@ -110,3 +110,7 @@ Windows only. The companion app modifies `Local State` in your browser's user da
 ## License
 
 MIT
+
+---
+
+*Netflix, Disney+, Amazon Prime Video, Google Chrome, and Microsoft Edge are trademarks of their respective owners. This project is not affiliated with or endorsed by any of them.*

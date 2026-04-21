@@ -34,8 +34,8 @@ class NativeHost {
     static void Main() {
         try {
             string message = ReadMessage();
-            string browser = Regex.Match(message, "\"browser\"\\s*:\\s*\"(\\w+)\"") is var bm && bm.Success
-                ? bm.Groups[1].Value : "edge";
+            var bm = Regex.Match(message, "\"browser\"\\s*:\\s*\"(\\w+)\"");
+            string browser = bm.Success ? bm.Groups[1].Value : "edge";
             var cfg = GetConfig(browser);
 
             if (message.Contains("\"get_status\"")) {

@@ -3,7 +3,7 @@
   "name": "GPU Acceleration Toggle",
   "version": "1.0.0",
   "description": "Toggle hardware acceleration on or off and restart with all tabs restored. Requires the companion app.",
-  "permissions": ["nativeMessaging"],
+  "permissions": ["nativeMessaging", "tabs"],
   "action": {
     "default_popup": "popup.html",
     "default_icon": {

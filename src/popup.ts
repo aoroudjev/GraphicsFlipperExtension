@@ -7,15 +7,23 @@ interface NativeResponse {
 
 type BrowserType = 'edge' | 'chrome';
 
+const RELEASES_URL = 'https://github.com/aoroudjev/GraphicsFlipperExtension/releases/latest';
+
 const badge       = document.getElementById('badge') as HTMLElement;
 const badgeText   = document.getElementById('badge-text') as HTMLElement;
 const statusLabel = document.getElementById('status-label') as HTMLElement;
 const statusSub   = document.getElementById('status-sub') as HTMLElement;
 const toggleBtn   = document.getElementById('toggle-btn') as HTMLButtonElement;
 const message     = document.getElementById('message') as HTMLElement;
+const installLink = document.getElementById('install-link') as HTMLAnchorElement;
 
 const browser: BrowserType = navigator.userAgent.includes('Edg/') ? 'edge' : 'chrome';
 const browserName = browser === 'edge' ? 'Edge' : 'Chrome';
+
+installLink.addEventListener('click', (e) => {
+  e.preventDefault();
+  chrome.tabs.create({ url: RELEASES_URL });
+});
 
 function setStatus(enabled: boolean): void {
   badge.className         = 'badge ' + (enabled ? 'on' : 'off');
@@ -23,6 +31,7 @@ function setStatus(enabled: boolean): void {
   statusLabel.textContent = enabled ? 'Enabled' : 'Disabled';
   statusSub.textContent   = enabled ? 'GPU acceleration is active' : 'GPU acceleration is off';
   toggleBtn.disabled      = false;
+  installLink.hidden      = true;
   toggleBtn.textContent   = enabled ? 'Disable & Restart' : 'Enable & Restart';
 }
 
@@ -30,9 +39,10 @@ function setError(msg: string): void {
   badge.className         = 'badge loading';
   badgeText.textContent   = '—';
   statusLabel.textContent = 'Unavailable';
-  statusSub.textContent   = 'Is the companion app installed?';
+  statusSub.textContent   = 'Companion app not found';
   message.textContent     = msg;
   message.className       = 'message error';
+  installLink.hidden      = false;
 }
 
 chrome.runtime.sendMessage({ action: 'get_status', browser }, (res: NativeResponse) => {

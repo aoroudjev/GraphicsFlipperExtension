@@ -1,3 +1,4 @@
 node_modules/
 companion/NativeHost.exe
+dist/
 *.js.map
